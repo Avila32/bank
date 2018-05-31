@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <title>^_^</title>
+    </head>
+    <body>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script>
+            function solve() {
+                var data = {
+                    sum: parseFloat(document.getElementById("sum").value),
+                    percent1: parseFloat(document.getElementById("percent1").value),
+                    percent2: parseFloat(document.getElementById("percent2").value),
+                    check_cost: parseFloat(document.getElementById("check_cost").value),
+                    matrix: [
+                        [
+                            parseFloat(document.getElementById("matrix00").value),
+                            parseFloat(document.getElementById("matrix01").value)
+                        ],
+                        [
+                            parseFloat(document.getElementById("matrix10").value),
+                            parseFloat(document.getElementById("matrix11").value)
+                        ]
+                    ]
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/solve",
+                    contentType: 'application/json; charset=utf-8',
+                    data:  JSON.stringify(data),
+                    success: function (response) {
+                        document.getElementById("output").value = 
+                        "with check=" + response[0] + ", " +
+                        "without check=" + response[1];
+                        document.getElementById("result").value = 
+                        (response[0] > response[1]) ? "do check" : "do not check";
+                    },
+                    dataType: "json"
+                });
+            }
+        </script>
+
+        <div rel="main" class="container content">
+            <div class="form-group col-lg-4">
+                <label class="control-label" for="sum">Sum</label>
+                <input class="form-control" id="sum" type="text" value="15000">
+                <label class="control-label" for="percent1">Percent 1</label>
+                <input class="form-control" id="percent1" type="text" value="0.15">
+                <label class="control-label" for="percent2">Percent 2</label>
+                <input class="form-control" id="percent2" type="text" value="0.09">
+                <label class="control-label" for="check_cost">Check cost</label>
+                <input class="form-control" id="check_cost" type="text" value="80">
+                <label class="control-label" for="matrix">Matrix</label>
+                <div id="matrix" class="container">
+                    <div class="row">
+                        <input class="form-control col-lg-6" id="matrix00" type="text" value="735">
+                        <input class="form-control col-lg-6" id="matrix01" type="text" value="15">
+                    </div>
+                    <div class="row">
+                        <input class="form-control col-lg-6" id="matrix10" type="text" value="225">
+                        <input class="form-control col-lg-6" id="matrix11" type="text" value="25">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-4">
+                <button class="btn btn-success" onclick="solve()">Solve</button>
+            </div>
+            <div class="form-group col-lg-4">
+                <input class="form-control" id="output" type="text" value="">
+            </div>
+            <div class="form-group col-lg-4">
+                <input class="form-control" id="result" type="text" value="">
+            </div>
+        </div>
+    </body>
+</html>
